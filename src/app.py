@@ -41,7 +41,6 @@ def sitemap():
 def get_users():
 
     users = User.query.all()
-
     return jsonify([user.serialize() for user in users]), 200
 
 
@@ -49,50 +48,50 @@ def get_users():
 def get_characters():
 
     characters = Characters.query.all()
-    
     return jsonify([character.serialize() for character in characters]), 200
 
 
 @app.route('/characters/<int:character_id>', methods=['GET'])
 def get_single_character(character_id):
 
-    favorite_characters = Favorite_Characters.query.filter_by(character_id=character_id).all()
-
-    return jsonify([fav_character.serialize() for fav_character in favorite_characters]), 200
+    character = Characters.query.get(character_id)
+    if character is None:
+        return jsonify({"msg": "character not found"}), 404
+    return jsonify(character.serialize()), 200
 
 
 @app.route('/planets', methods=['GET'])
 def get_planets():
 
     planets = Planets.query.all()
-
     return jsonify([planet.serialize() for planet in planets]), 200
 
 
 @app.route('/planets/<int:planet_id>', methods=['GET'])
 def get_single_planet(planet_id):
 
-    favorite_planets = Favorite_Planets.query.filter_by(planet_id=planet_id).all()
-
-    return jsonify([fav_planet.serialize() for fav_planet in favorite_planets]), 200
+    planet = Planets.query.get(planet_id)
+    if planet is None:
+        return jsonify({"msg": "planet not found"}), 404
+    return jsonify(planet.serialize()), 200
 
 
 @app.route('/vehicles', methods=['GET'])
 def get_vehicles():
 
     vehicles = Vehicles.query.all()
-
     return jsonify([vehicle.serialize() for vehicle in vehicles]), 200
 
 
 @app.route('/vehicles/<int:vehicle_id>', methods=['GET'])
 def get_single_vehicle(vehicle_id):
 
-    favorite_vehicles = Favorite_Vehicles.query.filter_by(vehicle_id=vehicle_id).all()
+    vehicle = Vehicles.query.get(vehicle_id)
+    if vehicle is None:
+        return jsonify({"msg": "vehicle not found"}), 404
+    return jsonify(vehicle.serialize()), 200
 
-    return jsonify([fav_vehicle.serialize() for fav_vehicle in favorite_vehicles]), 200
-
-
+    
 @app.route('/favorite/character/<int:character_id>', methods=['POST'])
 def add_single_favorite_character(character_id):
     
